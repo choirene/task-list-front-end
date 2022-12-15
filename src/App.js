@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import React from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
@@ -16,6 +17,24 @@ const TASKS = [
 ];
 
 const App = () => {
+  const [taskData, setTaskData] = useState(TASKS);
+
+  const toggleComplete = (id) => {
+    setTaskData(taskData => taskData.map(task => {
+      if(task.id === id){
+        return {...task, isComplete: !(task.isComplete)};
+      } else {
+        return task;
+      }
+    }));
+  };
+
+  const removeTask = (id) => {
+    setTaskData(taskData => taskData.filter(task => {
+      return task.id != id;
+    }));
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -23,7 +42,10 @@ const App = () => {
       </header>
       <main>
         <div>
-          <TaskList tasks={TASKS} />
+          <TaskList 
+            tasks={taskData}
+            onToggleComplete = {toggleComplete}
+            onRemoveTask = {removeTask} />
         </div>
       </main>
     </div>
